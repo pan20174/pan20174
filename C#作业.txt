@@ -1,0 +1,96 @@
+using System;
+namespace app
+{
+    class Xinyong
+    {
+        private float sum;
+        private float xiaofei;
+        public Xinyong(float a,float b)
+        {
+            sum = a;
+            xiaofei = b;
+        }
+        public void Zhangdan()
+        {
+            Console.WriteLine("--本月消费账单--");
+            Console.WriteLine("本月消费：");
+            Console.WriteLine(xiaofei);
+            Console.WriteLine("----------------");
+        }
+    }
+    // 第二个类
+    class Chuxu
+    {
+        private float sum;
+        private float xiaofei;
+        public Chuxu(float a,float b)
+        {
+            sum = a;
+            xiaofei=b;
+        }
+        public void Huankuan()
+        {
+            if(sum<xiaofei )
+            {
+                Console.WriteLine("还款失败，请使用其他储蓄卡");
+            }
+            else
+            {
+                sum -= xiaofei;
+                Console.WriteLine("还款成功！");
+                Console.WriteLine("储蓄卡余额：");
+                Console.WriteLine(sum);
+            }
+        }
+    }
+    class Delegate
+    {
+        // 定义委托
+        public delegate void MeDelegate();
+        // 定义事件
+        public event MeDelegate myevent;
+
+        public void Notify()
+        {
+            // 如果事件不为 null
+            if (myevent!= null)
+            {
+                Console.WriteLine("#已到本月还款日期#");
+                // 触发事件
+                myevent();
+            }
+        }
+    }
+    class Test
+    {
+        static void Main(string[] args)
+        {
+            float xiaofei;
+            string a,b;
+            // 委托的对象
+            Delegate obj1 = new Delegate();
+            Console.WriteLine("请输入消费：");
+            a=Console.ReadLine();
+            xiaofei=float.Parse(a);
+            Xinyong obj2 = new Xinyong(1000,xiaofei);
+            Chuxu obj3 = new Chuxu(1000, xiaofei);
+            Chuxu obj4 = new Chuxu(500, xiaofei);
+            obj1.myevent += new Delegate.MeDelegate(obj2.Zhangdan);
+            Console.WriteLine("请选择储蓄卡1还是储蓄卡2：");
+            b = Console.ReadLine();
+            if(b=="1")
+            {
+                obj1.myevent += new Delegate.MeDelegate(obj3.Huankuan);
+            }
+            else if(b=="2")
+            {
+                obj1.myevent += new Delegate.MeDelegate(obj4.Huankuan);
+            }
+            else
+            {
+                Console.WriteLine("储蓄卡输入错误！");
+            }
+            obj1.Notify();
+        }
+    }
+}
